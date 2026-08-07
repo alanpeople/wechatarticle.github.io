@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f8ff" />
+    <meta name="description" content="公众号AI写作助手，把灵感变成能读、能转发的好文章。" />
+    <title>公众号AI写作 · 写作工作台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="./assets/index-CMI5wqLU.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BpieRTwy.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+          <div class="brand-lockup">
+            <div class="brand-mark">文</div>
+            <div>
+              <div class="brand-name">公众号AI写作</div>
+              <div class="brand-caption">写作工作台 · Skill edition</div>
+            </div>
+          </div>
+          <button class="icon-button mobile-only" id="close-sidebar" aria-label="关闭侧栏">×</button>
+        </div>
+
+        <div class="privacy-badge">
+          <span class="pulse-dot"></span>
+          <span>本地私密空间</span>
+          <span class="privacy-lock">⌁</span>
+        </div>
+
+        <section class="intro-card">
+          <div class="intro-orb orb-one"></div>
+          <div class="intro-orb orb-two"></div>
+          <div class="intro-card-content">
+            <div class="eyebrow light-eyebrow"><span class="sparkle">✦</span> WECHAT PUBLISHER</div>
+            <h1>把灵感，写成<br /><em>有人愿意读的文章</em></h1>
+            <p>从选题、创作到排版，给你一位懂公众号的 AI 搭档。</p>
+            <button class="primary-button intro-cta" id="start-writing">
+              <span>开始使用</span><span class="button-arrow">→</span>
+            </button>
+          </div>
+        </section>
+
+        <div class="sidebar-section quick-section">
+          <div class="section-label-row">
+            <span class="section-label">你可以这样开始</span>
+            <span class="section-count">04</span>
+          </div>
+          <button class="sidebar-prompt" data-action="article" data-prompt="帮我写一篇公众号文章">
+            <span class="prompt-icon peach">✍</span><span>帮我写一篇文章</span><span class="prompt-chevron">↗</span>
+          </button>
+          <button class="sidebar-prompt" data-action="topics" data-prompt="给我 10 个适合公众号的选题">
+            <span class="prompt-icon blue">◌</span><span>给我 10 个选题</span><span class="prompt-chevron">↗</span>
+          </button>
+          <button class="sidebar-prompt" data-action="format" data-prompt="把下面这段内容排版成公众号风格">
+            <span class="prompt-icon green">▦</span><span>帮我排版</span><span class="prompt-chevron">↗</span>
+          </button>
+          <button class="sidebar-prompt" data-action="humanize" data-prompt="帮我把这段文字去掉 AI 味，写得更像真人">
+            <span class="prompt-icon lavender">⌁</span><span>去掉 AI 味</span><span class="prompt-chevron">↗</span>
+          </button>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-note">
+            <span class="note-mark">i</span>
+            <span>所有对话只保存在当前浏览器里</span>
+          </div>
+          <div class="footer-meta"><span>v1.0 beta</span><span>·</span><span>Made for creators</span></div>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="icon-button menu-button mobile-only" id="open-sidebar" aria-label="打开侧栏">☰</button>
+          <div class="page-heading">
+            <div class="heading-kicker"><span class="status-ring"></span> AI 写作空间</div>
+            <h2>今天，想写点什么？</h2>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-button theme-button" id="theme-toggle"><span class="theme-icon">◐</span><span class="theme-label">深色模式</span></button>
+            <button class="ghost-button" id="export-header"><span class="action-icon">↥</span><span>导出文章</span></button>
+            <button class="settings-button" id="open-settings"><span class="settings-dot">✦</span><span>设置</span><span class="settings-status" id="settings-status">未配置</span></button>
+          </div>
+        </header>
+
+        <section class="chat-stage">
+          <div class="chat-scroll" id="chat-scroll">
+            <div class="welcome-state" id="welcome-state">
+              <div class="welcome-art" aria-hidden="true">
+                <div class="art-paper paper-back"></div>
+                <div class="art-paper paper-front">
+                  <span class="paper-line line-long"></span><span class="paper-line line-medium"></span><span class="paper-line line-short"></span>
+                  <span class="paper-star star-one">✦</span><span class="paper-star star-two">✦</span>
+                </div>
+                <div class="art-sun"></div>
+              </div>
+              <div class="welcome-copy">
+                <div class="eyebrow"><span class="sparkle">✦</span> YOUR CREATIVE COPILOT</div>
+                <h3>你好，我是你的<br /><span>公众号写作搭档</span></h3>
+                <p>告诉我你的想法、素材或一个模糊的念头，<br class="desktop-break" />我们一起把它打磨成一篇好文章。</p>
+                <div class="welcome-chips">
+                  <button class="welcome-chip" data-action="article" data-prompt="帮我写一篇公众号文章">写一篇文章 <span>→</span></button>
+                  <button class="welcome-chip" data-action="topics" data-prompt="给我 10 个适合公众号的选题">找找新选题 <span>→</span></button>
+                  <button class="welcome-chip" data-action="format" data-prompt="帮我把这段内容排版成公众号风格">优化排版 <span>→</span></button>
+                </div>
+              </div>
+            </div>
+            <div class="messages-list" id="messages-list"></div>
+            <div class="typing-row hidden" id="typing-row">
+              <div class="avatar ai-avatar">✦</div>
+              <div class="typing-bubble"><span></span><span></span><span></span><em>正在组织语言</em></div>
+            </div>
+          </div>
+
+          <div class="composer-wrap">
+            <div class="composer-inner">
+              <div class="composer-tools">
+                <span class="composer-hint"><span class="hint-spark">✦</span> 灵感快捷入口</span>
+                <div class="composer-shortcuts">
+                  <button class="shortcut" data-action="article" data-prompt="帮我写一篇公众号文章"><span>✍</span> 写一篇文章</button>
+                  <button class="shortcut" data-action="topics" data-prompt="给我 10 个适合公众号的选题"><span>◌</span> 10 个选题</button>
+                  <button class="shortcut" data-action="format" data-prompt="把下面这段内容排版成公众号风格"><span>▦</span> 帮我排版</button>
+                  <button class="shortcut" data-action="humanize" data-prompt="帮我把这段文字去掉 AI 味，写得更像真人"><span>⌁</span> 去 AI 味</button>
+                </div>
+              </div>
+              <div class="input-box">
+                <textarea id="message-input" rows="1" placeholder="输入你的想法，按 Enter 发送 · Shift + Enter 换行"></textarea>
+                <div class="input-actions">
+                  <span class="input-footnote"><span class="kbd">↵</span> 发送</span>
+                  <button class="send-button" id="send-button" aria-label="发送消息"><span>发送</span><span class="send-arrow">↑</span></button>
+                </div>
+              </div>
+              <div class="composer-bottom"><span>DeepSeek · <span id="model-caption">deepseek-chat</span></span><button class="clear-button" id="clear-chat">清空当前对话</button></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop hidden" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-card settings-card model-settings-card">
+        <div class="modal-header"><div><div class="eyebrow"><span class="sparkle">✦</span> AI CONNECTIONS</div><h3 id="settings-title">配置你的 AI 大模型</h3><p>可保存多个模型，写作时随时切换。</p></div><button class="modal-close" data-close="settings-modal">×</button></div>
+        <div class="model-manager">
+          <div class="model-list-panel">
+            <div class="panel-title-row"><div><strong>我的模型</strong><span id="model-count">0 个配置</span></div><button class="add-model-button" id="add-model" type="button">＋ 新增</button></div>
+            <div class="model-list" id="model-list"></div>
+            <div class="model-list-help"><span>⌁</span><p>Key 只保存在本地浏览器。建议只添加你信任的 OpenAI 兼容接口。</p></div>
+          </div>
+          <div class="model-form-panel">
+            <div class="model-form-heading"><div><span class="form-eyebrow">MODEL PROFILE</span><h4 id="model-form-title">编辑模型</h4></div><button class="text-link hidden" id="delete-model" type="button">删除配置</button></div>
+            <div class="form-field compact-field"><label for="profile-name">配置名称</label><input id="profile-name" type="text" placeholder="例如：我的 DeepSeek" autocomplete="off" /></div>
+            <div class="form-grid">
+              <div class="form-field compact-field"><label for="provider-name">服务商（可选）</label><input id="provider-name" type="text" placeholder="例如：DeepSeek" autocomplete="off" /></div>
+              <div class="form-field compact-field"><label for="model-id">模型 ID</label><input id="model-id" type="text" placeholder="例如：deepseek-chat" autocomplete="off" /></div>
+            </div>
+            <div class="form-field compact-field"><label for="base-url">API 地址</label><input id="base-url" type="url" placeholder="https://api.deepseek.com" autocomplete="off" /><div class="field-help">填写服务商的 API 根地址，工具会自动请求 <code>/chat/completions</code>。</div></div>
+            <div class="form-field compact-field"><label for="api-key">API Key</label><div class="password-wrap"><input id="api-key" type="password" placeholder="sk-..." autocomplete="off" /><button class="password-toggle" id="toggle-key" type="button">显示</button></div><div class="field-help"><span class="secure-icon">⌁</span> 只保存在本地浏览器 <button class="text-link" id="open-tutorial">怎么获取 API Key？</button></div></div>
+            <div class="modal-tip"><span>✦</span><p>支持 DeepSeek、OpenAI、通义、Moonshot、智谱等 OpenAI 兼容接口。服务商需要允许浏览器跨域访问。</p></div>
+            <div class="modal-footer"><button class="secondary-button" data-close="settings-modal">稍后设置</button><button class="primary-button" id="save-model" type="button">保存模型 <span>→</span></button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="modal-card tutorial-card">
+        <div class="modal-header"><div><div class="eyebrow"><span class="sparkle">✦</span> QUICK GUIDE</div><h3 id="tutorial-title">5 步拿到 API Key</h3><p>整个过程只需要几分钟。</p></div><button class="modal-close" data-close="tutorial-modal">×</button></div>
+        <div class="tutorial-steps"><div class="tutorial-step"><span>01</span><div><strong>打开 DeepSeek 官网</strong><p>进入 <a href="https://platform.deepseek.com/" target="_blank" rel="noreferrer">platform.deepseek.com</a></p></div></div><div class="tutorial-step"><span>02</span><div><strong>注册并登录账号</strong><p>使用邮箱完成注册，登录控制台。</p></div></div><div class="tutorial-step"><span>03</span><div><strong>进入 API Keys 页面</strong><p>在左侧导航找到 API Keys。</p></div></div><div class="tutorial-step"><span>04</span><div><strong>创建一个新的 Key</strong><p>点击 Create API key 并复制。</p></div></div><div class="tutorial-step"><span>05</span><div><strong>粘贴回这里</strong><p>保存后即可开始与你的写作搭档对话。</p></div></div></div>
+        <div class="tutorial-placeholder"><span>截图占位</span><small>后续版本可补充图文指引</small></div>
+        <div class="modal-footer"><button class="primary-button" data-close="tutorial-modal">知道了，去配置 <span>→</span></button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="preview-modal" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+      <div class="modal-card preview-card">
+        <div class="modal-header preview-header"><div><div class="eyebrow"><span class="sparkle">✦</span> ARTICLE PREVIEW</div><h3 id="preview-title">文章预览</h3></div><button class="modal-close" data-close="preview-modal">×</button></div>
+        <div class="preview-toolbar"><span id="preview-meta">公众号排版预览</span><span class="preview-ready"><i></i> 已准备好发布</span></div>
+        <article class="article-preview" id="article-preview"></article>
+        <div class="preview-actions"><button class="secondary-button" id="copy-richtext">▣ 一键复制</button><button class="secondary-button" id="download-html">↓ HTML</button><button class="secondary-button" id="download-markdown">↓ Markdown</button><button class="primary-button" id="download-word">↓ Word 文档</button></div>
+      </div>
+    </div>
+
+    <div class="toast hidden" id="toast"><span class="toast-icon">✦</span><span id="toast-message"></span></div>
+  </body>
+</html>
