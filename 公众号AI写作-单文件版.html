@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f8ff" />
+    <meta name="description" content="公众号AI写作助手，把灵感变成能读、能转发的好文章。" />
+    <title>公众号AI写作 · 写作工作台</title>
+    <style>
+:root {
+  --bg: #f4f7fb;
+  --panel: rgba(255, 255, 255, 0.92);
+  --surface: #ffffff;
+  --surface-soft: #f8faff;
+  --surface-muted: #f1f4f9;
+  --line: #e7ecf3;
+  --line-strong: #dbe3ee;
+  --text: #162238;
+  --text-muted: #728097;
+  --text-faint: #9aa6b8;
+  --primary: #4478e8;
+  --primary-deep: #315ec6;
+  --primary-soft: #edf3ff;
+  --mint: #52c6a5;
+  --peach: #f9a98f;
+  --lavender: #a598e9;
+  --shadow-sm: 0 7px 24px rgba(45, 66, 102, 0.06);
+  --shadow-lg: 0 24px 80px rgba(29, 51, 89, 0.16);
+  --radius-lg: 24px;
+  --radius-md: 15px;
+  --radius-sm: 10px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-width: 375px; min-height: 100%; }
+body { background: var(--bg); color: var(--text); font-family: "Manrope", "Noto Sans SC", sans-serif; -webkit-font-smoothing: antialiased; }
+button, input, textarea, select { font: inherit; }
+button { border: 0; cursor: pointer; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(68, 120, 232, .22); outline-offset: 2px; }
+
+.app-shell { min-height: 100vh; display: flex; background: radial-gradient(circle at 76% 0%, rgba(230, 238, 255, .72), transparent 32%), var(--bg); }
+.sidebar { width: 328px; min-height: 100vh; flex: 0 0 328px; padding: 29px 23px 22px; display: flex; flex-direction: column; border-right: 1px solid rgba(222, 229, 239, .82); background: rgba(249, 251, 254, .84); }
+.sidebar-top { display: flex; align-items: center; justify-content: space-between; }
+.brand-lockup { display: flex; gap: 11px; align-items: center; }
+.brand-mark { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; color: white; font-size: 17px; font-weight: 800; background: linear-gradient(145deg, #5f92f4, #4773df); box-shadow: 0 7px 16px rgba(68, 120, 232, .22); }
+.brand-name { font-size: 14px; font-weight: 800; letter-spacing: -.02em; }
+.brand-caption { margin-top: 3px; color: var(--text-faint); font-size: 10px; letter-spacing: .03em; }
+.privacy-badge { display: inline-flex; align-self: flex-start; align-items: center; gap: 7px; margin: 25px 0 19px; padding: 7px 10px; border-radius: 20px; color: #4b8f7d; font-size: 10px; font-weight: 700; background: #e8f8f2; }
+.pulse-dot, .status-ring { width: 6px; height: 6px; border-radius: 50%; display: inline-block; background: #52c6a5; box-shadow: 0 0 0 4px rgba(82, 198, 165, .12); }
+.privacy-lock { color: #76bdab; font-size: 15px; line-height: 10px; transform: rotate(-30deg); }
+.intro-card { position: relative; overflow: hidden; min-height: 253px; border-radius: 21px; color: white; background: linear-gradient(140deg, #345fc5 1%, #4f7fe8 58%, #6c99ee 100%); box-shadow: 0 15px 28px rgba(67, 112, 214, .2); }
+.intro-card::after { content: ""; position: absolute; inset: auto -40px -82px auto; width: 190px; height: 190px; border: 1px solid rgba(255,255,255,.16); border-radius: 50%; box-shadow: 0 0 0 22px rgba(255,255,255,.05), 0 0 0 45px rgba(255,255,255,.05); }
+.intro-card-content { position: relative; z-index: 2; padding: 25px 21px; }
+.eyebrow { display: flex; gap: 6px; align-items: center; color: #8ca0c1; font-family: "DM Mono", monospace; font-size: 9px; font-weight: 500; letter-spacing: .16em; }
+.light-eyebrow { color: rgba(255,255,255,.7); }
+.sparkle { font-size: 12px; color: #86a9ff; }
+.light-eyebrow .sparkle { color: #c9d8ff; }
+.intro-card h1 { margin: 15px 0 9px; font-size: 24px; line-height: 1.33; letter-spacing: -.055em; }
+.intro-card h1 em { color: #dbe7ff; font-style: normal; }
+.intro-card p { max-width: 220px; margin: 0; color: rgba(255,255,255,.77); font-size: 11px; line-height: 1.7; }
+.intro-cta { margin-top: 21px; padding: 10px 13px 10px 16px; color: #315ec6; background: white; box-shadow: 0 8px 17px rgba(20, 54, 138, .12); }
+.intro-cta:hover { background: #f4f7ff; transform: translateY(-1px); }
+.button-arrow { margin-left: 16px; font-size: 16px; }
+.intro-orb { position: absolute; z-index: 1; border-radius: 50%; border: 1px solid rgba(255,255,255,.12); }
+.orb-one { width: 136px; height: 136px; right: -42px; top: -58px; box-shadow: 0 0 0 18px rgba(255,255,255,.03), 0 0 0 38px rgba(255,255,255,.03); }
+.orb-two { width: 70px; height: 70px; right: 30px; bottom: 13px; border-color: rgba(255,255,255,.1); }
+.sidebar-section { margin-top: 25px; }
+.section-label-row { display: flex; justify-content: space-between; align-items: center; margin: 0 4px 11px; }
+.section-label { color: #98a5b9; font-family: "DM Mono", monospace; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+.section-count { color: #bdc7d5; font-family: "DM Mono", monospace; font-size: 9px; }
+.sidebar-prompt { width: 100%; display: flex; gap: 10px; align-items: center; padding: 9px 5px; color: #637189; text-align: left; background: transparent; font-size: 11px; transition: color .2s, transform .2s; }
+.sidebar-prompt:hover { color: var(--primary); transform: translateX(2px); }
+.prompt-icon { width: 26px; height: 26px; flex: 0 0 26px; display: grid; place-items: center; border-radius: 8px; font-size: 13px; }
+.prompt-icon.peach { color: #ed8c72; background: #fff0ea; }.prompt-icon.blue { color: #668fe9; background: #edf2ff; }.prompt-icon.green { color: #51af93; background: #e8f8f2; }.prompt-icon.lavender { color: #8b7fd4; background: #f1efff; }
+.prompt-chevron { margin-left: auto; color: #c3cbd7; font-size: 13px; }
+.sidebar-footer { margin-top: auto; }
+.sidebar-note { display: flex; align-items: center; gap: 8px; color: #9aa6b7; font-size: 9px; line-height: 1.45; }
+.note-mark { width: 15px; height: 15px; flex: 0 0 15px; display: grid; place-items: center; border: 1px solid #c1cad8; border-radius: 50%; color: #9aa6b7; font-family: Georgia, serif; font-size: 10px; }
+.footer-meta { display: flex; gap: 7px; margin-top: 19px; color: #c1c9d5; font-family: "DM Mono", monospace; font-size: 8px; }
+
+.main-panel { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+.topbar { display: flex; align-items: center; justify-content: space-between; min-height: 107px; padding: 23px 46px 20px 49px; border-bottom: 1px solid rgba(224, 230, 239, .75); }
+.heading-kicker { display: flex; gap: 9px; align-items: center; margin-bottom: 8px; color: #8b98ad; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+.page-heading h2 { margin: 0; color: #1d2b42; font-size: 21px; letter-spacing: -.045em; }
+.top-actions { display: flex; gap: 8px; align-items: center; }
+.ghost-button, .settings-button, .secondary-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; font-size: 11px; transition: all .2s; }
+.ghost-button { padding: 10px 12px; color: #7f8da2; background: transparent; }
+.ghost-button:hover { color: var(--primary); background: var(--primary-soft); }
+.theme-icon { font-size: 16px; }
+.action-icon { font-size: 16px; color: #8b99ae; }
+.settings-button { padding: 10px 13px; color: white; background: #3d70db; box-shadow: 0 7px 15px rgba(61, 112, 219, .18); }
+.settings-button:hover { background: #315fc9; transform: translateY(-1px); }
+.settings-dot { color: #bdd1ff; font-size: 12px; }
+.settings-status { margin-left: 2px; padding-left: 8px; border-left: 1px solid rgba(255,255,255,.25); color: rgba(255,255,255,.7); font-size: 9px; }
+.chat-stage { min-height: 0; flex: 1; display: flex; flex-direction: column; }
+.chat-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 42px 8.5% 30px; scroll-behavior: smooth; }
+.chat-scroll::-webkit-scrollbar { width: 8px; }.chat-scroll::-webkit-scrollbar-thumb { background: #dce4ef; border: 2px solid transparent; border-radius: 8px; background-clip: padding-box; }
+.welcome-state { min-height: 420px; display: flex; gap: clamp(35px, 8vw, 125px); align-items: center; justify-content: center; padding: 15px 2% 35px; }
+.welcome-art { position: relative; width: 190px; height: 205px; flex: 0 0 190px; transform: rotate(-4deg); }
+.art-paper { position: absolute; width: 130px; height: 167px; border-radius: 9px; border: 1px solid #dae6f5; background: white; box-shadow: 0 14px 30px rgba(86, 123, 173, .09); }
+.paper-back { top: 19px; left: 32px; transform: rotate(12deg); background: #edf4fd; }.paper-front { top: 3px; left: 28px; padding: 39px 18px; transform: rotate(-3deg); }
+.paper-front::before { content: ""; position: absolute; top: 18px; left: 18px; width: 50px; height: 7px; border-radius: 4px; background: #dbe7f8; }
+.paper-line { display: block; height: 5px; margin: 10px 0; border-radius: 4px; background: #e5edf7; }.line-long { width: 85px; }.line-medium { width: 69px; }.line-short { width: 45px; }
+.paper-star { position: absolute; color: #84aaf2; font-size: 17px; }.star-one { top: 15px; right: 17px; }.star-two { right: 25px; bottom: 18px; color: #a7c0f2; font-size: 11px; }.art-sun { position: absolute; right: 8px; bottom: 15px; width: 30px; height: 30px; border-radius: 50%; background: #ffd1bd; box-shadow: 0 0 0 9px rgba(255,209,189,.25); }
+.welcome-copy { max-width: 412px; }.welcome-copy h3 { margin: 15px 0 13px; color: #26354c; font-size: clamp(27px, 3vw, 37px); line-height: 1.24; letter-spacing: -.07em; }.welcome-copy h3 span { color: #4a79df; }.welcome-copy p { margin: 0; color: #8794a8; font-size: 12px; line-height: 1.9; }.welcome-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }.welcome-chip { padding: 8px 10px 8px 13px; border: 1px solid #e1e8f3; border-radius: 9px; color: #6e7f97; background: rgba(255,255,255,.7); font-size: 10px; box-shadow: var(--shadow-sm); transition: all .2s; }.welcome-chip span { margin-left: 8px; color: #9fb5ed; }.welcome-chip:hover { color: var(--primary); border-color: #c7d7f8; background: white; transform: translateY(-1px); }
+.messages-list { width: min(780px, 100%); margin: 0 auto; }.message-row { display: flex; gap: 12px; margin: 24px 0; animation: appear .28s ease-out; }.message-row.user { flex-direction: row-reverse; }.avatar { width: 29px; height: 29px; flex: 0 0 29px; display: grid; place-items: center; border-radius: 10px; font-size: 12px; font-weight: 800; }.ai-avatar { color: white; background: linear-gradient(140deg, #628ff0, #3d6bd4); box-shadow: 0 5px 12px rgba(61, 107, 212, .18); }.user-avatar { color: #8b6f61; background: #ffe8dc; }.message-content { max-width: min(75%, 620px); }.message-meta { margin: 2px 0 7px; color: #9aa7b9; font-family: "DM Mono", monospace; font-size: 9px; }.message-row.user .message-meta { text-align: right; }.message-bubble { padding: 13px 16px; border-radius: 5px 16px 16px 16px; color: #506078; background: white; box-shadow: var(--shadow-sm); font-size: 12px; line-height: 1.85; }.message-row.user .message-bubble { border-radius: 16px 5px 16px 16px; color: white; background: linear-gradient(135deg, #4c7fe5, #396dd8); box-shadow: 0 8px 18px rgba(59, 107, 215, .14); }.message-bubble p { margin: 0 0 10px; }.message-bubble p:last-child { margin-bottom: 0; }.message-bubble h1,.message-bubble h2,.message-bubble h3 { margin: 3px 0 9px; color: #273a58; line-height: 1.4; }.message-row.user .message-bubble h1,.message-row.user .message-bubble h2,.message-row.user .message-bubble h3 { color: white; }.message-bubble h1 { font-size: 19px; }.message-bubble h2 { font-size: 16px; }.message-bubble h3 { font-size: 14px; }.message-bubble ul,.message-bubble ol { padding-left: 21px; margin: 7px 0 10px; }.message-bubble li { margin: 4px 0; }.message-bubble blockquote { margin: 9px 0; padding: 4px 12px; border-left: 3px solid #a9c2fa; color: #7d8ca3; background: #f6f8fc; }.message-row.user .message-bubble blockquote { color: rgba(255,255,255,.8); background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.55); }.message-bubble code { padding: 2px 5px; border-radius: 5px; color: #5b6b91; background: #f0f3f8; font-family: "DM Mono", monospace; font-size: 10px; }.message-bubble pre { position: relative; overflow: auto; margin: 10px 0; padding: 13px; border-radius: 10px; color: #d7e5ff; background: #1c2940; font-family: "DM Mono", monospace; font-size: 10px; line-height: 1.65; }.message-bubble pre code { padding: 0; color: inherit; background: transparent; }.message-bubble table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 10px; }.message-bubble th,.message-bubble td { padding: 6px 8px; border: 1px solid #e5ebf4; text-align: left; }.message-bubble th { color: #59709c; background: #f3f6fb; }.message-row.user .message-bubble a { color: white; }.message-bubble a { color: #4778dd; }.message-actions { display: flex; gap: 9px; margin-top: 9px; }.message-action { padding: 5px 8px; border-radius: 7px; color: #8191a8; background: #f4f7fb; font-size: 9px; }.message-action:hover { color: var(--primary); background: var(--primary-soft); }.message-row.user .message-actions { justify-content: flex-end; }.message-row.user .message-action { color: #7695db; background: #edf3ff; }
+.typing-row { display: flex; gap: 12px; width: min(780px, 100%); margin: 22px auto; animation: appear .2s ease-out; }.typing-bubble { display: flex; align-items: center; gap: 4px; padding: 13px 15px; border-radius: 5px 16px 16px 16px; background: white; box-shadow: var(--shadow-sm); }.typing-bubble span { width: 5px; height: 5px; border-radius: 50%; background: #82a4ed; animation: bounce 1.2s infinite; }.typing-bubble span:nth-child(2) { animation-delay: .16s; }.typing-bubble span:nth-child(3) { animation-delay: .32s; }.typing-bubble em { margin-left: 6px; color: #9ba8b9; font-size: 10px; font-style: normal; }
+.composer-wrap { padding: 10px 8.5% 24px; }.composer-inner { width: min(780px, 100%); margin: 0 auto; }.composer-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 11px; }.composer-hint { color: #9aa7b9; font-family: "DM Mono", monospace; font-size: 9px; }.hint-spark { color: #86a8ed; margin-right: 4px; }.composer-shortcuts { display: flex; gap: 6px; }.shortcut { display: inline-flex; gap: 5px; align-items: center; padding: 6px 8px; border: 1px solid #e4eaf2; border-radius: 7px; color: #7b899d; background: transparent; font-size: 9px; transition: all .2s; }.shortcut span { color: #8ca7e6; font-size: 12px; }.shortcut:hover { color: var(--primary); border-color: #cad9f5; background: white; }.input-box { padding: 12px 13px 9px 16px; border: 1px solid #dfe6f0; border-radius: 16px; background: rgba(255,255,255,.9); box-shadow: 0 9px 30px rgba(58, 82, 117, .07); transition: border .2s, box-shadow .2s; }.input-box:focus-within { border-color: #a9c2f4; box-shadow: 0 9px 30px rgba(58, 105, 199, .1), 0 0 0 3px rgba(113, 153, 233, .08); }.input-box textarea { width: 100%; resize: none; min-height: 29px; max-height: 130px; padding: 3px 0 5px; border: 0; outline: 0; color: #43526a; background: transparent; font-size: 12px; line-height: 1.7; }.input-box textarea::placeholder { color: #b0bac8; }.input-actions { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }.input-footnote { color: #b2bdca; font-size: 9px; }.kbd { display: inline-grid; place-items: center; width: 15px; height: 15px; margin-right: 3px; border: 1px solid #dce4ed; border-radius: 4px; color: #9caaba; background: #f8fafc; font-size: 10px; }.send-button,.primary-button { display: inline-flex; align-items: center; justify-content: center; border-radius: 9px; color: white; background: #4377e5; font-size: 11px; font-weight: 700; transition: all .2s; }.send-button { gap: 10px; min-width: 72px; padding: 9px 10px 9px 13px; }.send-button:hover,.primary-button:hover { background: #315fc9; box-shadow: 0 8px 16px rgba(56, 103, 211, .18); transform: translateY(-1px); }.send-button:disabled { opacity: .52; cursor: not-allowed; transform: none; box-shadow: none; }.send-arrow { font-size: 16px; line-height: 11px; }.composer-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 9px; padding: 0 3px; color: #a7b2c1; font-family: "DM Mono", monospace; font-size: 8px; }.clear-button { padding: 3px 0; color: #a7b2c1; background: transparent; font-size: 9px; }.clear-button:hover { color: #e27f79; }
+.mobile-only { display: none; }.hidden { display: none !important; }
+
+.modal-backdrop { position: fixed; z-index: 20; inset: 0; display: grid; place-items: center; padding: 20px; background: rgba(22, 34, 56, .38); backdrop-filter: blur(7px); animation: fade .2s ease-out; }.modal-card { width: min(500px, 100%); max-height: min(760px, calc(100vh - 40px)); overflow: auto; padding: 28px; border: 1px solid rgba(255,255,255,.75); border-radius: 22px; background: rgba(255,255,255,.98); box-shadow: var(--shadow-lg); animation: slide-up .24s ease-out; }.modal-header { display: flex; justify-content: space-between; gap: 20px; }.modal-header h3 { margin: 8px 0 5px; color: #253650; font-size: 24px; letter-spacing: -.06em; }.modal-header p { margin: 0; color: #929fb1; font-size: 11px; }.modal-close { width: 29px; height: 29px; flex: 0 0 29px; border-radius: 9px; color: #8d9aae; background: #f3f6fa; font-size: 20px; line-height: 20px; }.modal-close:hover { color: #344d77; background: #e9eef6; }.form-field { margin-top: 25px; }.form-field label { display: block; margin-bottom: 8px; color: #56667f; font-size: 11px; font-weight: 700; }.password-wrap,.select-wrap { position: relative; display: flex; align-items: center; }.form-field input,.form-field select { width: 100%; height: 43px; padding: 0 13px; border: 1px solid #dde5ef; border-radius: 10px; outline: 0; color: #3d4e68; background: #fbfcfe; font-size: 12px; }.form-field input:focus,.form-field select:focus { border-color: #9fbaf0; box-shadow: 0 0 0 3px rgba(68,120,232,.08); }.password-wrap input { padding-right: 60px; }.password-toggle { position: absolute; right: 9px; padding: 5px; color: #7b9ce6; background: transparent; font-size: 10px; }.select-wrap select { appearance: none; padding-right: 36px; }.select-wrap > span { position: absolute; right: 14px; pointer-events: none; color: #94a4b9; }.field-help { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 9px; color: #9aa7b9; font-size: 9px; line-height: 1.6; }.secure-icon { color: #5cc1a2; font-size: 13px; }.text-link { padding: 0; color: #4b7de3; background: transparent; font-size: 9px; }.text-link:hover { text-decoration: underline; }.modal-tip { display: flex; gap: 8px; margin-top: 23px; padding: 11px 12px; border-radius: 10px; color: #7a8aa1; background: #f2f6ff; font-size: 10px; line-height: 1.65; }.modal-tip > span { color: #76a0f2; }.modal-tip p { margin: 0; }.modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 25px; }.primary-button { gap: 12px; padding: 11px 14px; }.secondary-button { padding: 10px 12px; color: #72829a; background: #f3f6fa; }.secondary-button:hover { color: #446fc9; background: #eaf0ff; }.tutorial-card { width: min(520px, 100%); }.tutorial-steps { display: grid; gap: 1px; margin-top: 23px; }.tutorial-step { display: flex; gap: 14px; padding: 11px 0; border-bottom: 1px solid #edf1f6; }.tutorial-step > span { min-width: 25px; color: #89aaf0; font-family: "DM Mono", monospace; font-size: 10px; }.tutorial-step strong { color: #51617a; font-size: 11px; }.tutorial-step p { margin: 4px 0 0; color: #9aa7b7; font-size: 10px; }.tutorial-step a { color: #4c7cdb; }.tutorial-placeholder { display: grid; place-items: center; min-height: 78px; margin-top: 18px; border: 1px dashed #cad9f2; border-radius: 12px; color: #8ba9e7; background: #f7faff; }.tutorial-placeholder span { font-size: 11px; }.tutorial-placeholder small { margin-top: 3px; color: #b1bfda; font-size: 9px; }.preview-card { width: min(760px, 100%); padding: 24px; }.preview-header { align-items: center; }.preview-header h3 { margin-top: 7px; }.preview-toolbar { display: flex; justify-content: space-between; align-items: center; margin: 18px 0 12px; padding-bottom: 12px; border-bottom: 1px solid #edf0f5; color: #a0acba; font-family: "DM Mono", monospace; font-size: 9px; }.preview-ready { display: inline-flex; gap: 5px; align-items: center; color: #5aae91; }.preview-ready i { width: 6px; height: 6px; border-radius: 50%; background: #60c3a0; }.article-preview { max-height: min(54vh, 540px); overflow: auto; padding: 31px clamp(22px, 7vw, 72px) 40px; border: 1px solid #edf0f5; border-radius: 14px; color: #44556e; background: #fff; font-family: "Noto Sans SC", sans-serif; font-size: 13px; line-height: 2; }.article-preview::-webkit-scrollbar { width: 6px; }.article-preview::-webkit-scrollbar-thumb { background: #dfe7f3; border-radius: 8px; }.article-preview h1 { margin: 0 0 20px; color: #1d2b42; font-size: clamp(23px, 4vw, 31px); line-height: 1.35; letter-spacing: -.05em; }.article-preview h2 { margin: 28px 0 9px; padding-left: 11px; border-left: 3px solid #5b87e6; color: #293c5c; font-size: 18px; line-height: 1.5; }.article-preview h3 { margin: 20px 0 7px; color: #3e5b8d; font-size: 15px; }.article-preview p { margin: 0 0 13px; }.article-preview ul,.article-preview ol { padding-left: 24px; }.article-preview li { margin: 4px 0; }.article-preview blockquote { margin: 17px 0; padding: 9px 14px; border-left: 3px solid #8ab1f2; color: #7184a0; background: #f5f8fe; }.article-preview img { max-width: 100%; }.preview-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 8px; margin-top: 15px; }.preview-actions .primary-button { padding-left: 15px; padding-right: 15px; }
+.toast { position: fixed; z-index: 50; right: 28px; bottom: 28px; display: flex; gap: 9px; align-items: center; max-width: min(370px, calc(100vw - 40px)); padding: 12px 15px; border: 1px solid rgba(255,255,255,.8); border-radius: 12px; color: #52647d; background: rgba(255,255,255,.96); box-shadow: 0 14px 35px rgba(37, 61, 100, .17); font-size: 11px; animation: slide-up .25s ease-out; }.toast-icon { color: #5b89e8; }
+
+body[data-theme="dark"] { --bg: #101827; --panel: #152033; --surface: #1a2639; --surface-soft: #18253a; --surface-muted: #202d41; --line: #26354c; --line-strong: #34445e; --text: #e8eef9; --text-muted: #9eacc2; --text-faint: #728098; --primary-soft: #1b315c; --shadow-sm: 0 7px 24px rgba(0,0,0,.14); --shadow-lg: 0 24px 80px rgba(0,0,0,.4); background: #101827; }.dark body { background: #101827; }.dark .app-shell, body[data-theme="dark"] .app-shell { background: radial-gradient(circle at 76% 0%, rgba(36, 64, 115, .38), transparent 34%), var(--bg); }.dark .sidebar, body[data-theme="dark"] .sidebar { border-color: #26354c; background: rgba(17, 28, 46, .8); }.dark .topbar, body[data-theme="dark"] .topbar { border-color: #26354c; }.dark .page-heading h2, body[data-theme="dark"] .page-heading h2 { color: #e9effa; }.dark .welcome-copy h3, body[data-theme="dark"] .welcome-copy h3 { color: #e2eafa; }.dark .welcome-copy p, body[data-theme="dark"] .welcome-copy p { color: #8e9db5; }.dark .welcome-chip, body[data-theme="dark"] .welcome-chip { border-color: #2a3a53; color: #9cabc1; background: #162238; }.dark .art-paper, body[data-theme="dark"] .art-paper { border-color: #30415d; background: #17263c; }.dark .paper-back, body[data-theme="dark"] .paper-back { background: #1e304b; }.dark .paper-front::before, body[data-theme="dark"] .paper-front::before { background: #354969; }.dark .paper-line, body[data-theme="dark"] .paper-line { background: #293c5c; }.dark .message-bubble, body[data-theme="dark"] .message-bubble { color: #b6c2d4; background: #1a273b; }.dark .message-bubble h1,.dark .message-bubble h2,.dark .message-bubble h3, body[data-theme="dark"] .message-bubble h1, body[data-theme="dark"] .message-bubble h2, body[data-theme="dark"] .message-bubble h3 { color: #e5edfc; }.dark .message-bubble blockquote, body[data-theme="dark"] .message-bubble blockquote { color: #9caac1; background: #202f46; }.dark .message-bubble code, body[data-theme="dark"] .message-bubble code { color: #bbcbeb; background: #263650; }.dark .message-bubble th, .dark .message-bubble td, body[data-theme="dark"] .message-bubble th, body[data-theme="dark"] .message-bubble td { border-color: #34445e; }.dark .message-bubble th, body[data-theme="dark"] .message-bubble th { color: #abc1ed; background: #22324d; }.dark .input-box, body[data-theme="dark"] .input-box { border-color: #31425c; background: #162238; }.dark .input-box textarea, body[data-theme="dark"] .input-box textarea { color: #dce6f5; }.dark .shortcut, body[data-theme="dark"] .shortcut { border-color: #2b3b55; color: #9caac0; }.dark .shortcut:hover, body[data-theme="dark"] .shortcut:hover { background: #1b2b45; }.dark .modal-card, body[data-theme="dark"] .modal-card { border-color: #354761; background: #17243a; }.dark .modal-header h3, body[data-theme="dark"] .modal-header h3 { color: #e7eefb; }.dark .form-field label, body[data-theme="dark"] .form-field label { color: #bbc8dc; }.dark .form-field input,.dark .form-field select, body[data-theme="dark"] .form-field input, body[data-theme="dark"] .form-field select { border-color: #34445e; color: #dce7f8; background: #111e32; }.dark .modal-tip, body[data-theme="dark"] .modal-tip { color: #a9b7cc; background: #1d3157; }.dark .secondary-button,.dark .modal-close, body[data-theme="dark"] .secondary-button, body[data-theme="dark"] .modal-close { color: #aebbd0; background: #25354d; }.dark .preview-toolbar, body[data-theme="dark"] .preview-toolbar { border-color: #2b3b53; }.dark .article-preview, body[data-theme="dark"] .article-preview { border-color: #2b3c55; color: #c0cbe0; background: #fbfcff; }.dark .tutorial-step, body[data-theme="dark"] .tutorial-step { border-color: #2b3b53; }.dark .tutorial-placeholder, body[data-theme="dark"] .tutorial-placeholder { border-color: #38527c; background: #182a49; }.dark .toast, body[data-theme="dark"] .toast { border-color: #34455f; color: #cfdaeb; background: #1b2a40; }
+
+@keyframes appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } } @keyframes bounce { 0%,80%,100% { transform: translateY(0); opacity: .55; } 40% { transform: translateY(-4px); opacity: 1; } } @keyframes fade { from { opacity: 0; } to { opacity: 1; } } @keyframes slide-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (max-width: 1040px) { .sidebar { width: 288px; flex-basis: 288px; padding-left: 18px; padding-right: 18px; }.topbar { padding-left: 30px; padding-right: 30px; }.chat-scroll,.composer-wrap { padding-left: 6%; padding-right: 6%; }.welcome-state { gap: 35px; }.welcome-art { transform: scale(.84) rotate(-4deg); margin-right: -25px; } }
+@media (max-width: 780px) { .sidebar { position: fixed; z-index: 30; top: 0; bottom: 0; left: 0; width: min(328px, 88vw); transform: translateX(-102%); transition: transform .25s ease; box-shadow: 15px 0 40px rgba(29,51,89,.12); }.sidebar.open { transform: translateX(0); }.mobile-only { display: inline-flex; }.menu-button { margin-right: 10px; }.topbar { justify-content: flex-start; padding: 18px 20px; }.page-heading { flex: 1; }.top-actions { margin-left: auto; }.top-actions .ghost-button { display: none; }.settings-button { padding: 9px 10px; }.settings-status { display: none; }.chat-scroll { padding: 25px 18px 22px; }.welcome-state { min-height: 460px; flex-direction: column; gap: 3px; text-align: center; padding-top: 12px; }.welcome-art { margin: -14px 0 -10px; transform: scale(.78) rotate(-4deg); }.welcome-copy p { font-size: 11px; }.welcome-chips { justify-content: center; }.composer-wrap { padding: 8px 15px 17px; }.composer-tools { align-items: flex-start; flex-direction: column; gap: 8px; }.composer-shortcuts { width: 100%; overflow-x: auto; padding-bottom: 2px; }.shortcut { white-space: nowrap; }.input-footnote { display: none; }.message-content { max-width: 84%; } }
+@media (max-width: 480px) { .topbar { min-height: 83px; }.heading-kicker { margin-bottom: 5px; font-size: 9px; }.page-heading h2 { font-size: 17px; }.settings-button span:nth-child(2) { display: none; }.settings-button { width: 36px; height: 36px; padding: 0; }.settings-dot { font-size: 15px; }.welcome-copy h3 { font-size: 28px; }.desktop-break { display: none; }.preview-card,.modal-card { padding: 21px 18px; }.preview-actions { justify-content: stretch; }.preview-actions button { flex: 1 1 40%; }.modal-footer { flex-wrap: wrap; }.modal-footer button { flex: 1; }.toast { right: 15px; bottom: 15px; }.message-row { gap: 8px; }.avatar { width: 27px; height: 27px; flex-basis: 27px; }.message-content { max-width: calc(100% - 35px); }.message-bubble { font-size: 11px; }.article-preview { padding: 25px 17px 32px; } }
+.message-bubble pre { padding-top: 31px; }
+.code-copy { position: absolute; top: 7px; right: 8px; padding: 3px 6px; border-radius: 5px; color: #b4c9ef; background: rgba(255,255,255,.1); font-size: 9px; }
+.code-copy:hover { color: white; background: rgba(255,255,255,.18); }
+
+.model-settings-card { width: min(900px, 100%); }
+.model-manager { display: grid; grid-template-columns: 255px minmax(0, 1fr); gap: 25px; margin-top: 25px; }
+.model-list-panel { min-width: 0; padding-right: 22px; border-right: 1px solid #edf1f6; }
+.panel-title-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.panel-title-row strong { display: block; color: #53647d; font-size: 12px; }
+.panel-title-row span { display: block; margin-top: 3px; color: #a4afbf; font-size: 9px; }
+.add-model-button { padding: 7px 9px; border: 1px solid #d9e4f8; border-radius: 8px; color: #4d7cdc; background: #f5f8ff; font-size: 10px; font-weight: 700; }
+.add-model-button:hover { border-color: #b9cdf4; background: #eaf1ff; }
+.model-list { display: grid; gap: 8px; max-height: 255px; overflow: auto; padding: 2px; margin: 0 -2px; }
+.model-list-empty { padding: 24px 12px; border: 1px dashed #dce5f2; border-radius: 12px; color: #99a8bc; background: #fafcff; text-align: center; font-size: 10px; line-height: 1.7; }
+.model-item { position: relative; width: 100%; padding: 11px 12px; border: 1px solid #e5ebf4; border-radius: 11px; color: #5d6e87; background: #fbfcfe; text-align: left; transition: all .2s; }
+.model-item:hover { border-color: #c9d9f6; background: #f5f8ff; transform: translateY(-1px); }
+.model-item.active { border-color: #9dbaf0; background: #eff5ff; box-shadow: 0 5px 14px rgba(72, 117, 211, .09); }
+.model-item-name { display: block; padding-right: 18px; color: #3f5270; font-size: 11px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.model-item-meta { display: block; max-width: 100%; margin-top: 5px; color: #96a4b7; font-family: "DM Mono", monospace; font-size: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.model-item-status { position: absolute; top: 12px; right: 11px; width: 6px; height: 6px; border-radius: 50%; background: #c4cfdd; }
+.model-item.active .model-item-status { background: #55bb99; box-shadow: 0 0 0 3px rgba(85, 187, 153, .14); }
+.model-list-help { display: flex; gap: 7px; margin-top: 16px; color: #9ba8ba; font-size: 9px; line-height: 1.65; }
+.model-list-help > span { color: #74a1ed; font-size: 13px; }
+.model-list-help p { margin: 0; }
+.model-form-panel { min-width: 0; }
+.model-form-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
+.form-eyebrow { color: #9ba9bd; font-family: "DM Mono", monospace; font-size: 8px; letter-spacing: .11em; }
+.model-form-heading h4 { margin: 5px 0 0; color: #334766; font-size: 16px; }
+.compact-field { margin-top: 16px; }
+.compact-field label { margin-bottom: 7px; }
+.compact-field input { height: 40px; }
+.form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.compact-field .field-help { margin-top: 7px; }
+.compact-field .field-help code { padding: 1px 4px; border-radius: 4px; color: #6a7fa8; background: #f0f4fb; font-family: "DM Mono", monospace; font-size: 8px; }
+.model-form-panel .modal-tip { margin-top: 17px; }
+.model-form-panel .modal-footer { margin-top: 18px; }
+.model-form-panel .text-link { margin-top: 2px; }
+
+body[data-theme="dark"] .model-list-panel { border-color: #2b3b53; }
+body[data-theme="dark"] .panel-title-row strong, body[data-theme="dark"] .model-form-heading h4 { color: #dce6f7; }
+body[data-theme="dark"] .panel-title-row span, body[data-theme="dark"] .model-item-meta { color: #8d9db6; }
+body[data-theme="dark"] .add-model-button { border-color: #375486; color: #a9c3f8; background: #1d3155; }
+body[data-theme="dark"] .add-model-button:hover { background: #243c69; }
+body[data-theme="dark"] .model-list-empty, body[data-theme="dark"] .model-item { border-color: #2d3e58; color: #aab8cd; background: #142137; }
+body[data-theme="dark"] .model-item:hover, body[data-theme="dark"] .model-item.active { border-color: #5576af; background: #1b3156; }
+body[data-theme="dark"] .model-item-name { color: #d4e0f5; }
+body[data-theme="dark"] .model-list-help, body[data-theme="dark"] .form-eyebrow { color: #899ab4; }
+body[data-theme="dark"] .compact-field .field-help code { color: #b1c5ec; background: #243755; }
+
+@media (max-width: 700px) {
+  .model-manager { grid-template-columns: 1fr; gap: 20px; }
+  .model-list-panel { padding-right: 0; padding-bottom: 20px; border-right: 0; border-bottom: 1px solid #edf1f6; }
+  .model-list { max-height: 180px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body[data-theme="dark"] .model-list-panel { border-color: #2b3b53; }
+}
+@media (max-width: 480px) {
+  .model-list { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; gap: 0; }
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top">
+          <div class="brand-lockup">
+            <div class="brand-mark">文</div>
+            <div>
+              <div class="brand-name">公众号AI写作</div>
+              <div class="brand-caption">写作工作台 · Skill edition</div>
+            </div>
+          </div>
+          <button class="icon-button mobile-only" id="close-sidebar" aria-label="关闭侧栏">×</button>
+        </div>
+
+        <div class="privacy-badge">
+          <span class="pulse-dot"></span>
+          <span>本地私密空间</span>
+          <span class="privacy-lock">⌁</span>
+        </div>
+
+        <section class="intro-card">
+          <div class="intro-orb orb-one"></div>
+          <div class="intro-orb orb-two"></div>
+          <div class="intro-card-content">
+            <div class="eyebrow light-eyebrow"><span class="sparkle">✦</span> WECHAT PUBLISHER</div>
+            <h1>把灵感，写成<br /><em>有人愿意读的文章</em></h1>
+            <p>从选题、创作到排版，给你一位懂公众号的 AI 搭档。</p>
+            <button class="primary-button intro-cta" id="start-writing">
+              <span>开始使用</span><span class="button-arrow">→</span>
+            </button>
+          </div>
+        </section>
+
+        <div class="sidebar-section quick-section">
+          <div class="section-label-row">
+            <span class="section-label">你可以这样开始</span>
+            <span class="section-count">04</span>
+          </div>
+          <button class="sidebar-prompt" data-action="article" data-prompt="帮我写一篇公众号文章">
+            <span class="prompt-icon peach">✍</span><span>帮我写一篇文章</span><span class="prompt-chevron">↗</span>
+          </button>
+          <button class="sidebar-prompt" data-action="topics" data-prompt="给我 10 个适合公众号的选题">
+            <span class="prompt-icon blue">◌</span><span>给我 10 个选题</span><span class="prompt-chevron">↗</span>
+          </button>
+          <button class="sidebar-prompt" data-action="format" data-prompt="把下面这段内容排版成公众号风格">
+            <span class="prompt-icon green">▦</span><span>帮我排版</span><span class="prompt-chevron">↗</span>
+          </button>
+          <button class="sidebar-prompt" data-action="humanize" data-prompt="帮我把这段文字去掉 AI 味，写得更像真人">
+            <span class="prompt-icon lavender">⌁</span><span>去掉 AI 味</span><span class="prompt-chevron">↗</span>
+          </button>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-note">
+            <span class="note-mark">i</span>
+            <span>所有对话只保存在当前浏览器里</span>
+          </div>
+          <div class="footer-meta"><span>v1.0 beta</span><span>·</span><span>Made for creators</span></div>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="topbar">
+          <button class="icon-button menu-button mobile-only" id="open-sidebar" aria-label="打开侧栏">☰</button>
+          <div class="page-heading">
+            <div class="heading-kicker"><span class="status-ring"></span> AI 写作空间</div>
+            <h2>今天，想写点什么？</h2>
+          </div>
+          <div class="top-actions">
+            <button class="ghost-button theme-button" id="theme-toggle"><span class="theme-icon">◐</span><span class="theme-label">深色模式</span></button>
+            <button class="ghost-button" id="export-header"><span class="action-icon">↥</span><span>导出文章</span></button>
+            <button class="settings-button" id="open-settings"><span class="settings-dot">✦</span><span>设置</span><span class="settings-status" id="settings-status">未配置</span></button>
+          </div>
+        </header>
+
+        <section class="chat-stage">
+          <div class="chat-scroll" id="chat-scroll">
+            <div class="welcome-state" id="welcome-state">
+              <div class="welcome-art" aria-hidden="true">
+                <div class="art-paper paper-back"></div>
+                <div class="art-paper paper-front">
+                  <span class="paper-line line-long"></span><span class="paper-line line-medium"></span><span class="paper-line line-short"></span>
+                  <span class="paper-star star-one">✦</span><span class="paper-star star-two">✦</span>
+                </div>
+                <div class="art-sun"></div>
+              </div>
+              <div class="welcome-copy">
+                <div class="eyebrow"><span class="sparkle">✦</span> YOUR CREATIVE COPILOT</div>
+                <h3>你好，我是你的<br /><span>公众号写作搭档</span></h3>
+                <p>告诉我你的想法、素材或一个模糊的念头，<br class="desktop-break" />我们一起把它打磨成一篇好文章。</p>
+                <div class="welcome-chips">
+                  <button class="welcome-chip" data-action="article" data-prompt="帮我写一篇公众号文章">写一篇文章 <span>→</span></button>
+                  <button class="welcome-chip" data-action="topics" data-prompt="给我 10 个适合公众号的选题">找找新选题 <span>→</span></button>
+                  <button class="welcome-chip" data-action="format" data-prompt="帮我把这段内容排版成公众号风格">优化排版 <span>→</span></button>
+                </div>
+              </div>
+            </div>
+            <div class="messages-list" id="messages-list"></div>
+            <div class="typing-row hidden" id="typing-row">
+              <div class="avatar ai-avatar">✦</div>
+              <div class="typing-bubble"><span></span><span></span><span></span><em>正在组织语言</em></div>
+            </div>
+          </div>
+
+          <div class="composer-wrap">
+            <div class="composer-inner">
+              <div class="composer-tools">
+                <span class="composer-hint"><span class="hint-spark">✦</span> 灵感快捷入口</span>
+                <div class="composer-shortcuts">
+                  <button class="shortcut" data-action="article" data-prompt="帮我写一篇公众号文章"><span>✍</span> 写一篇文章</button>
+                  <button class="shortcut" data-action="topics" data-prompt="给我 10 个适合公众号的选题"><span>◌</span> 10 个选题</button>
+                  <button class="shortcut" data-action="format" data-prompt="把下面这段内容排版成公众号风格"><span>▦</span> 帮我排版</button>
+                  <button class="shortcut" data-action="humanize" data-prompt="帮我把这段文字去掉 AI 味，写得更像真人"><span>⌁</span> 去 AI 味</button>
+                </div>
+              </div>
+              <div class="input-box">
+                <textarea id="message-input" rows="1" placeholder="输入你的想法，按 Enter 发送 · Shift + Enter 换行"></textarea>
+                <div class="input-actions">
+                  <span class="input-footnote"><span class="kbd">↵</span> 发送</span>
+                  <button class="send-button" id="send-button" aria-label="发送消息"><span>发送</span><span class="send-arrow">↑</span></button>
+                </div>
+              </div>
+              <div class="composer-bottom"><span>DeepSeek · <span id="model-caption">deepseek-chat</span></span><button class="clear-button" id="clear-chat">清空当前对话</button></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop hidden" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-card settings-card model-settings-card">
+        <div class="modal-header"><div><div class="eyebrow"><span class="sparkle">✦</span> AI CONNECTIONS</div><h3 id="settings-title">配置你的 AI 大模型</h3><p>可保存多个模型，写作时随时切换。</p></div><button class="modal-close" data-close="settings-modal">×</button></div>
+        <div class="model-manager">
+          <div class="model-list-panel">
+            <div class="panel-title-row"><div><strong>我的模型</strong><span id="model-count">0 个配置</span></div><button class="add-model-button" id="add-model" type="button">＋ 新增</button></div>
+            <div class="model-list" id="model-list"></div>
+            <div class="model-list-help"><span>⌁</span><p>Key 只保存在本地浏览器。建议只添加你信任的 OpenAI 兼容接口。</p></div>
+          </div>
+          <div class="model-form-panel">
+            <div class="model-form-heading"><div><span class="form-eyebrow">MODEL PROFILE</span><h4 id="model-form-title">编辑模型</h4></div><button class="text-link hidden" id="delete-model" type="button">删除配置</button></div>
+            <div class="form-field compact-field"><label for="profile-name">配置名称</label><input id="profile-name" type="text" placeholder="例如：我的 DeepSeek" autocomplete="off" /></div>
+            <div class="form-grid">
+              <div class="form-field compact-field"><label for="provider-name">服务商（可选）</label><input id="provider-name" type="text" placeholder="例如：DeepSeek" autocomplete="off" /></div>
+              <div class="form-field compact-field"><label for="model-id">模型 ID</label><input id="model-id" type="text" placeholder="例如：deepseek-chat" autocomplete="off" /></div>
+            </div>
+            <div class="form-field compact-field"><label for="base-url">API 地址</label><input id="base-url" type="url" placeholder="https://api.deepseek.com" autocomplete="off" /><div class="field-help">填写服务商的 API 根地址，工具会自动请求 <code>/chat/completions</code>。</div></div>
+            <div class="form-field compact-field"><label for="api-key">API Key</label><div class="password-wrap"><input id="api-key" type="password" placeholder="sk-..." autocomplete="off" /><button class="password-toggle" id="toggle-key" type="button">显示</button></div><div class="field-help"><span class="secure-icon">⌁</span> 只保存在本地浏览器 <button class="text-link" id="open-tutorial">怎么获取 API Key？</button></div></div>
+            <div class="modal-tip"><span>✦</span><p>支持 DeepSeek、OpenAI、通义、Moonshot、智谱等 OpenAI 兼容接口。服务商需要允许浏览器跨域访问。</p></div>
+            <div class="modal-footer"><button class="secondary-button" data-close="settings-modal">稍后设置</button><button class="primary-button" id="save-model" type="button">保存模型 <span>→</span></button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="tutorial-modal" role="dialog" aria-modal="true" aria-labelledby="tutorial-title">
+      <div class="modal-card tutorial-card">
+        <div class="modal-header"><div><div class="eyebrow"><span class="sparkle">✦</span> QUICK GUIDE</div><h3 id="tutorial-title">5 步拿到 API Key</h3><p>整个过程只需要几分钟。</p></div><button class="modal-close" data-close="tutorial-modal">×</button></div>
+        <div class="tutorial-steps"><div class="tutorial-step"><span>01</span><div><strong>打开 DeepSeek 官网</strong><p>进入 <a href="https://platform.deepseek.com/" target="_blank" rel="noreferrer">platform.deepseek.com</a></p></div></div><div class="tutorial-step"><span>02</span><div><strong>注册并登录账号</strong><p>使用邮箱完成注册，登录控制台。</p></div></div><div class="tutorial-step"><span>03</span><div><strong>进入 API Keys 页面</strong><p>在左侧导航找到 API Keys。</p></div></div><div class="tutorial-step"><span>04</span><div><strong>创建一个新的 Key</strong><p>点击 Create API key 并复制。</p></div></div><div class="tutorial-step"><span>05</span><div><strong>粘贴回这里</strong><p>保存后即可开始与你的写作搭档对话。</p></div></div></div>
+        <div class="tutorial-placeholder"><span>截图占位</span><small>后续版本可补充图文指引</small></div>
+        <div class="modal-footer"><button class="primary-button" data-close="tutorial-modal">知道了，去配置 <span>→</span></button></div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="preview-modal" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+      <div class="modal-card preview-card">
+        <div class="modal-header preview-header"><div><div class="eyebrow"><span class="sparkle">✦</span> ARTICLE PREVIEW</div><h3 id="preview-title">文章预览</h3></div><button class="modal-close" data-close="preview-modal">×</button></div>
+        <div class="preview-toolbar"><span id="preview-meta">公众号排版预览</span><span class="preview-ready"><i></i> 已准备好发布</span></div>
+        <article class="article-preview" id="article-preview"></article>
+        <div class="preview-actions"><button class="secondary-button" id="copy-richtext">▣ 一键复制</button><button class="secondary-button" id="download-html">↓ HTML</button><button class="secondary-button" id="download-markdown">↓ Markdown</button><button class="primary-button" id="download-word">↓ Word 文档</button></div>
+      </div>
+    </div>
+
+    <div class="toast hidden" id="toast"><span class="toast-icon">✦</span><span id="toast-message"></span></div>
+    <script>
+const STORAGE = {
+  key: 'deepseek_api_key',
+  history: 'chat_history',
+  theme: 'theme',
+  model: 'model',
+  models: 'ai_models',
+  currentModel: 'current_ai_model'
+};
+
+const EMBEDDED_SKILL_PROMPT = `你是“公众号AI写作助手”，内嵌 wechat-publisher-ultimate 写作 Skill。你的任务是陪用户完成公众号内容创作：先理解目标读者、主题、语气和发布场景，再给出清晰的创作方案；在用户确认或信息足够时，产出有标题、导语、正文、小标题、结尾和互动引导的完整文章。
+
+写作原则：内容真实、有信息密度、有具体细节；用自然的中文，像一个有经验的作者，不要套话、空话或明显的 AI 腔。标题简洁有吸引力但不夸张。段落短一些，适合手机阅读；重要观点用小标题、列表和加粗突出。用户需要完整成稿时，使用 Markdown 输出，并将标题置于第一个一级标题。遇到模糊需求先询问 1-3 个最关键的问题，也可以基于合理假设先给一版并说明假设。除非用户另有要求，不要编造事实、数据、引用或经历。`;
+
+const state = {
+  history: loadJSON(STORAGE.history, []),
+  models: loadModels(),
+  currentModelId: localStorage.getItem(STORAGE.currentModel) || '',
+  theme: localStorage.getItem(STORAGE.theme) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+  isSending: false,
+  currentArticle: { title: '未命名文章', markdown: '', html: '' },
+  toastTimer: null,
+  editingModelId: ''
+};
+
+if (!state.models.length) state.models = [createDefaultModel()];
+if (!state.models.some((model) => model.id === state.currentModelId)) state.currentModelId = state.models[0].id;
+syncActiveModel();
+
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+function loadJSON(key, fallback) {
+  try { const value = JSON.parse(localStorage.getItem(key)); return Array.isArray(value) ? value : fallback; } catch { return fallback; }
+}
+
+function makeModelId() { return `model-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`; }
+
+function createDefaultModel() {
+  const legacyKey = localStorage.getItem(STORAGE.key) || '';
+  const legacyModel = localStorage.getItem(STORAGE.model) || 'deepseek-chat';
+  return { id: 'deepseek-default', name: 'DeepSeek', provider: 'DeepSeek', baseUrl: 'https://api.deepseek.com', apiKey: legacyKey, model: legacyModel };
+}
+
+function loadModels() {
+  const saved = loadJSON(STORAGE.models, []);
+  if (saved.length) return saved.map((model) => ({
+    id: model.id || makeModelId(),
+    name: model.name || model.model || '未命名模型',
+    provider: model.provider || 'OpenAI 兼容',
+    baseUrl: model.baseUrl || 'https://api.deepseek.com',
+    apiKey: model.apiKey || '',
+    model: model.model || 'deepseek-chat'
+  }));
+  return [createDefaultModel()];
+}
+
+function saveModels() {
+  localStorage.setItem(STORAGE.models, JSON.stringify(state.models));
+  localStorage.setItem(STORAGE.currentModel, state.currentModelId);
+  const active = getActiveModel();
+  localStorage.setItem(STORAGE.key, active?.apiKey || '');
+  localStorage.setItem(STORAGE.model, active?.model || '');
+}
+
+function getActiveModel() { return state.models.find((model) => model.id === state.currentModelId) || state.models[0]; }
+
+function syncActiveModel() {
+  const active = getActiveModel();
+  state.apiKey = active?.apiKey || '';
+  state.model = active?.model || '';
+  state.baseUrl = active?.baseUrl || '';
+}
+
+function normalizeBaseUrl(value) {
+  const baseUrl = String(value || '').trim().replace(/\/+$/, '');
+  if (!baseUrl) return '';
+  return /\/chat\/completions$/i.test(baseUrl) ? baseUrl : `${baseUrl}/chat/completions`;
+}
+
+function saveHistory() {
+  state.history = state.history.slice(-50);
+  localStorage.setItem(STORAGE.history, JSON.stringify(state.history));
+}
+
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#039;', '"': '&quot;' }[char]));
+}
+
+function inlineMarkdown(value) {
+  return value
+    .replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+)\)/g, '<img alt="$1" src="$2" />')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/__([^_]+)__/g, '<strong>$1</strong>')
+    .replace(/~~([^~]+)~~/g, '<del>$1</del>')
+    .replace(/(^|[^*])\*([^*]+)\*/g, '$1<em>$2</em>');
+}
+
+function markdownToHtml(markdown) {
+  const lines = String(markdown || '').replace(/\r/g, '').split('\n');
+  let html = '';
+  let inCode = false;
+  let codeLanguage = '';
+  let codeLines = [];
+  let listType = '';
+  let listItems = [];
+  let quoteLines = [];
+  let tableLines = [];
+
+  const flushList = () => {
+    if (!listType || !listItems.length) return;
+    html += `<${listType}>${listItems.map((item) => `<li>${inlineMarkdown(item)}</li>`).join('')}</${listType}>`;
+    listType = ''; listItems = [];
+  };
+  const flushQuote = () => { if (quoteLines.length) { html += `<blockquote>${quoteLines.map((line) => `<p>${inlineMarkdown(line)}</p>`).join('')}</blockquote>`; quoteLines = []; } };
+  const flushTable = () => {
+    if (tableLines.length < 2) return;
+    const rows = tableLines.filter((row) => !/^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$/.test(row));
+    if (!rows.length) return;
+    const parseRow = (row) => row.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((cell) => inlineMarkdown(cell.trim()));
+    const [head, ...body] = rows;
+    html += `<table><thead><tr>${parseRow(head).map((cell) => `<th>${cell}</th>`).join('')}</tr></thead><tbody>${body.map((row) => `<tr>${parseRow(row).map((cell) => `<td>${cell}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    tableLines = [];
+  };
+
+  const flushParagraph = (paragraph) => { if (paragraph.length) html += `<p>${inlineMarkdown(paragraph.join('<br />'))}</p>`; };
+  let paragraph = [];
+  const flushAll = () => { flushParagraph(paragraph); paragraph = []; flushList(); flushQuote(); flushTable(); };
+
+  for (const rawLine of lines) {
+    const line = rawLine.trimEnd();
+    if (line.startsWith('```')) {
+      flushAll();
+      if (!inCode) { inCode = true; codeLanguage = line.slice(3).trim(); codeLines = []; }
+      else { html += `<pre><code class="language-${escapeHtml(codeLanguage)}">${escapeHtml(codeLines.join('\n'))}</code></pre>`; inCode = false; codeLanguage = ''; }
+      continue;
+    }
+    if (inCode) { codeLines.push(line); continue; }
+    if (/^\s*\|.*\|\s*$/.test(line)) { flushAll(); tableLines.push(line); continue; }
+    if (tableLines.length) flushTable();
+    const heading = line.match(/^\s*(#{1,3})\s+(.+)$/);
+    if (heading) { flushAll(); const level = heading[1].length; html += `<h${level}>${inlineMarkdown(heading[2])}</h${level}>`; continue; }
+    const unordered = line.match(/^\s*[-*+]\s+(.+)$/);
+    const ordered = line.match(/^\s*\d+[.)]\s+(.+)$/);
+    if (unordered || ordered) { flushParagraph(paragraph); paragraph = []; flushQuote(); const type = unordered ? 'ul' : 'ol'; if (listType && listType !== type) flushList(); listType = type; listItems.push((unordered || ordered)[1]); continue; }
+    if (/^\s*>\s?/.test(line)) { flushParagraph(paragraph); paragraph = []; flushList(); quoteLines.push(line.replace(/^\s*>\s?/, '')); continue; }
+    if (!line.trim()) { flushAll(); continue; }
+    flushList(); flushQuote(); paragraph.push(escapeHtml(line));
+  }
+  if (inCode) html += `<pre><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`;
+  flushAll();
+  return html || '<p>还没有内容。</p>';
+}
+
+function getTitle(markdown) {
+  const heading = String(markdown || '').match(/^\s*#\s+(.+)$/m);
+  if (heading) return heading[1].replace(/[*_`]/g, '').trim();
+  const firstLine = String(markdown || '').split('\n').find((line) => line.trim() && !line.trim().startsWith('>'));
+  return (firstLine || '未命名文章').replace(/[#*_`]/g, '').trim().slice(0, 42);
+}
+
+function articleHtml(markdown) {
+  const title = getTitle(markdown);
+  const body = markdownToHtml(markdown).replace(new RegExp(`<h1>${escapeRegExp(escapeHtml(title))}</h1>`), '');
+  return `<article style="max-width:680px;margin:0 auto;padding:36px 24px;color:#44556e;font-family:'Noto Sans SC',Arial,sans-serif;font-size:15px;line-height:2;background:#fff"><h1 style="margin:0 0 24px;color:#1d2b42;font-size:32px;line-height:1.35">${escapeHtml(title)}</h1>${body}</article>`;
+}
+
+function escapeRegExp(value) { return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function renderMessages() {
+  const list = $('#messages-list');
+  const hasHistory = state.history.length > 0;
+  $('#welcome-state').classList.toggle('hidden', hasHistory);
+  list.innerHTML = state.history.map((message, index) => {
+    const isUser = message.role === 'user';
+    const content = isUser ? escapeHtml(message.content).replace(/\n/g, '<br />') : markdownToHtml(message.content);
+    const actions = !isUser && message.content.length > 80 ? `<div class="message-actions"><button class="message-action" data-preview-index="${index}">▣ 预览文章</button><button class="message-action" data-copy-index="${index}">复制内容</button></div>` : '';
+    return `<div class="message-row ${isUser ? 'user' : 'assistant'}"><div class="avatar ${isUser ? 'user-avatar' : 'ai-avatar'}">${isUser ? '我' : '✦'}</div><div class="message-content"><div class="message-meta">${isUser ? 'YOU' : 'AI WRITER'} · ${formatTime(message.time)}</div><div class="message-bubble">${content}</div>${actions}</div></div>`;
+  }).join('');
+  $$('.message-bubble pre').forEach((pre) => {
+    if (!pre.querySelector('.code-copy')) pre.insertAdjacentHTML('afterbegin', '<button class="code-copy" type="button">复制</button>');
+  });
+  list.querySelectorAll('[data-preview-index]').forEach((button) => button.addEventListener('click', () => openPreview(state.history[Number(button.dataset.previewIndex)].content)));
+  list.querySelectorAll('[data-copy-index]').forEach((button) => button.addEventListener('click', () => copyText(state.history[Number(button.dataset.copyIndex)].content, '内容已复制')));
+  list.querySelectorAll('.code-copy').forEach((button) => button.addEventListener('click', () => copyText(button.parentElement.innerText.replace(/^复制\n?/, ''), '代码已复制')));
+  requestAnimationFrame(scrollToBottom);
+}
+
+function formatTime(time) { return new Date(time || Date.now()).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }); }
+function scrollToBottom() { const area = $('#chat-scroll'); area.scrollTop = area.scrollHeight; }
+
+function addMessage(role, content) { state.history.push({ role, content, time: Date.now() }); saveHistory(); renderMessages(); }
+
+function welcomeMessage() {
+  if (state.history.length) { renderMessages(); return; }
+  addMessage('assistant', '你好，我是你的公众号写作搭档 ✦\n\n你可以把一个想法、一段素材，甚至一句还没想清楚的话交给我。\n\n我能帮你：\n- 找到值得写的选题和角度\n- 写出完整的公众号文章\n- 优化标题、开头和结尾\n- 把文字排成适合手机阅读的样子\n\n先告诉我，你今天想写什么？');
+}
+
+function openModal(id) {
+  $(`#${id}`).classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  if (id === 'settings-modal') {
+    state.editingModelId = state.currentModelId;
+    renderModelManager();
+    setTimeout(() => $('#profile-name')?.focus(), 50);
+  }
+}
+function closeModal(id) { $(`#${id}`).classList.add('hidden'); if (!$$('.modal-backdrop:not(.hidden)').length) document.body.classList.remove('modal-open'); }
+function showToast(message) { const toast = $('#toast'); $('#toast-message').textContent = message; toast.classList.remove('hidden'); clearTimeout(state.toastTimer); state.toastTimer = setTimeout(() => toast.classList.add('hidden'), 2600); }
+
+function renderModelManager() {
+  const list = $('#model-list');
+  $('#model-count').textContent = `${state.models.length} 个配置`;
+  list.innerHTML = state.models.length ? state.models.map((model) => `
+    <button class="model-item ${model.id === state.currentModelId ? 'active' : ''}" type="button" data-model-id="${escapeHtml(model.id)}">
+      <span class="model-item-status"></span>
+      <span class="model-item-name">${escapeHtml(model.name)}</span>
+      <span class="model-item-meta">${escapeHtml(model.provider || 'OpenAI 兼容')} · ${escapeHtml(model.model)}</span>
+    </button>`).join('') : '<div class="model-list-empty">还没有模型配置<br />点击右上角新增一个</div>';
+  list.querySelectorAll('[data-model-id]').forEach((button) => button.addEventListener('click', () => {
+    selectModel(button.dataset.modelId);
+  }));
+  const editing = state.models.find((model) => model.id === state.editingModelId) || getActiveModel();
+  if (editing) fillModelForm(editing);
+}
+
+function fillModelForm(model) {
+  state.editingModelId = model.id;
+  $('#model-form-title').textContent = model.id === state.currentModelId ? '当前模型' : '编辑模型';
+  $('#profile-name').value = model.name || '';
+  $('#provider-name').value = model.provider || '';
+  $('#model-id').value = model.model || '';
+  $('#base-url').value = model.baseUrl || '';
+  $('#api-key').value = model.apiKey || '';
+  $('#delete-model').classList.toggle('hidden', state.models.length <= 1);
+  $('#toggle-key').textContent = '显示';
+  $('#api-key').type = 'password';
+}
+
+function selectModel(id) {
+  const model = state.models.find((item) => item.id === id);
+  if (!model) return;
+  state.currentModelId = model.id;
+  state.editingModelId = model.id;
+  syncActiveModel();
+  saveModels();
+  renderModelManager();
+  updateConfigUi();
+  showToast(`已切换到「${model.name}」`);
+}
+
+function startNewModel() {
+  const model = { id: makeModelId(), name: '', provider: 'OpenAI 兼容', baseUrl: 'https://api.openai.com/v1', apiKey: '', model: '' };
+  state.models.push(model);
+  state.editingModelId = model.id;
+  renderModelManager();
+  $('#profile-name').focus();
+}
+
+function saveEditingModel() {
+  const model = state.models.find((item) => item.id === state.editingModelId);
+  const name = $('#profile-name').value.trim();
+  const provider = $('#provider-name').value.trim() || 'OpenAI 兼容';
+  const modelId = $('#model-id').value.trim();
+  const baseUrl = $('#base-url').value.trim();
+  const apiKey = $('#api-key').value.trim();
+  if (!model || !name || !modelId || !baseUrl) { showToast('请填写配置名称、模型 ID 和 API 地址'); return; }
+  if (!/^https?:\/\//i.test(baseUrl)) { showToast('API 地址需要以 http:// 或 https:// 开头'); return; }
+  Object.assign(model, { name, provider, model: modelId, baseUrl: baseUrl.replace(/\/+$/, ''), apiKey });
+  state.currentModelId = model.id;
+  syncActiveModel();
+  saveModels();
+  renderModelManager();
+  updateConfigUi();
+  showToast(`「${model.name}」已保存并设为当前模型`);
+}
+
+function deleteEditingModel() {
+  if (state.models.length <= 1) { showToast('至少保留一个模型配置'); return; }
+  const deleting = state.models.find((model) => model.id === state.editingModelId);
+  if (!deleting || !confirm(`确定删除「${deleting.name || '这个模型'}」吗？`)) return;
+  state.models = state.models.filter((model) => model.id !== deleting.id);
+  if (state.currentModelId === deleting.id) state.currentModelId = state.models[0].id;
+  state.editingModelId = state.currentModelId;
+  syncActiveModel();
+  saveModels();
+  renderModelManager();
+  updateConfigUi();
+  showToast('模型配置已删除');
+}
+
+function ensureApiKey() {
+  const active = getActiveModel();
+  if (active?.apiKey.trim()) return true;
+  showToast('请先在设置中填写当前模型的 API Key');
+  openModal('settings-modal');
+  return false;
+}
+
+function getLastAssistantContent() {
+  const lastUserIndex = [...state.history].map((message) => message.role).lastIndexOf('user');
+  if (lastUserIndex < 0) return '';
+  return state.history.slice(lastUserIndex + 1).reverse().find((message) => message.role === 'assistant' && message.content?.trim())?.content.trim() || '';
+}
+
+function buildShortcutMessage(action, fallbackPrompt, source) {
+  if (!source) return fallbackPrompt;
+  const instructions = {
+    article: '请基于下面的素材，写成一篇完整的微信公众号文章。补足结构、标题、导语、小标题、正文、结尾和互动引导；不要编造素材中没有的事实。',
+    topics: '请根据下面的素材，提炼出 10 个适合微信公众号的选题。每个选题给出标题、切入角度和一句说明，避免重复。',
+    format: '请将下面的内容重新排版成适合微信公众号发布的文章。保持原意和事实，不随意删减；优化标题层级、段落长度、列表和重点表达，使用 Markdown 输出。',
+    humanize: '请把下面的内容去掉明显的 AI 味，改得更像一个真实作者写的公众号文章。保留事实和核心观点，减少套话、空话和机械连接词。'
+  }[action] || fallbackPrompt;
+  return `${instructions}\n\n【待处理素材】\n${source}`;
+}
+
+function handleShortcut(button) {
+  const input = $('#message-input');
+  const typed = input.value.trim();
+  const previousAnswer = getLastAssistantContent();
+  const source = typed || previousAnswer;
+  if (!typed && previousAnswer) showToast('已自动引用上一条 AI 回复作为素材');
+  sendMessage(buildShortcutMessage(button.dataset.action, button.dataset.prompt, source));
+}
+
+async function sendMessage(prefilled) {
+  if (state.isSending) return;
+  const input = $('#message-input'); const text = (prefilled ?? input.value).trim();
+  if (!text) { input.focus(); return; }
+  if (!ensureApiKey()) return;
+  input.value = ''; resizeTextarea(); addMessage('user', text); setSending(true);
+  const assistant = { role: 'assistant', content: '', time: Date.now() }; state.history.push(assistant); saveHistory(); renderMessages();
+  $('#typing-row').classList.remove('hidden'); renderMessages();
+  try {
+    const active = getActiveModel();
+    const response = await fetch(normalizeBaseUrl(active.baseUrl), { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${active.apiKey.trim()}` }, body: JSON.stringify({ model: active.model, messages: [{ role: 'system', content: EMBEDDED_SKILL_PROMPT }, ...state.history.filter((message) => message.content).slice(-50).map(({ role, content }) => ({ role, content }))], stream: true }) });
+    if (!response.ok) throw new Error(await friendlyApiError(response));
+    $('#typing-row').classList.add('hidden');
+    await readStream(response, assistant);
+    if (!assistant.content) assistant.content = '抱歉，这次没有收到有效回复，请稍后再试。';
+    saveHistory(); renderMessages();
+  } catch (error) {
+    state.history = state.history.filter((message) => message !== assistant); saveHistory(); renderMessages(); showToast(error.message || '网络连接失败，请检查配置后再试');
+  } finally { $('#typing-row').classList.add('hidden'); setSending(false); }
+}
+
+async function friendlyApiError(response) {
+  let detail = ''; try { const data = await response.json(); detail = data?.error?.message || ''; } catch { /* noop */ }
+  if (response.status === 401) return 'API Key 无效，请检查后重新保存';
+  if (response.status === 402) return '账户余额不足，请前往 DeepSeek 控制台查看';
+  if (response.status === 429) return '请求太频繁了，请稍等片刻再试';
+  return detail || `请求失败（${response.status}），请稍后再试`;
+}
+
+async function readStream(response, assistant) {
+  const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = '';
+  const consumeEvent = (event) => {
+    const line = event.split('\n').find((entry) => entry.startsWith('data:'));
+    if (!line) return; const payload = line.slice(5).trim(); if (payload === '[DONE]') return;
+    try { const delta = JSON.parse(payload).choices?.[0]?.delta?.content || ''; if (delta) { assistant.content += delta; renderMessages(); } } catch { /* wait for next chunk */ }
+  };
+  while (true) {
+    const { value, done } = await reader.read(); if (done) break; buffer += decoder.decode(value, { stream: true });
+    const events = buffer.split('\n\n'); buffer = events.pop() || '';
+    events.forEach(consumeEvent);
+  }
+  if (buffer.trim()) consumeEvent(buffer);
+}
+
+function setSending(sending) { state.isSending = sending; $('#send-button').disabled = sending; $('#message-input').disabled = sending; $('#send-button').innerHTML = sending ? '<span>生成中</span><span class="send-arrow">…</span>' : '<span>发送</span><span class="send-arrow">↑</span>'; }
+function resizeTextarea() { const input = $('#message-input'); input.style.height = 'auto'; input.style.height = `${Math.min(input.scrollHeight, 130)}px`; }
+
+function openPreview(markdown) { state.currentArticle = { title: getTitle(markdown), markdown, html: articleHtml(markdown) }; $('#preview-title').textContent = state.currentArticle.title; $('#article-preview').innerHTML = markdownToHtml(markdown); $('#preview-meta').textContent = `${state.currentArticle.title} · 公众号排版预览`; openModal('preview-modal'); }
+
+function downloadFile(filename, content, mime) { const blob = new Blob([content], { type: mime }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(url), 500); }
+function exportHtml() { const { title, html } = state.currentArticle; downloadFile(`${title}.html`, `<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><title>${escapeHtml(title)}</title></head><body>${html}</body></html>`, 'text/html;charset=utf-8'); showToast('HTML 文件已导出'); }
+function exportMarkdown() { const { title, markdown } = state.currentArticle; downloadFile(`${title}.md`, markdown, 'text/markdown;charset=utf-8'); showToast('Markdown 文件已导出'); }
+
+function crc32(bytes) { let crc = 0xffffffff; for (const byte of bytes) { crc ^= byte; for (let bit = 0; bit < 8; bit++) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1)); } return (crc ^ 0xffffffff) >>> 0; }
+function u16(value) { return [value & 255, (value >>> 8) & 255]; } function u32(value) { return [value & 255, (value >>> 8) & 255, (value >>> 16) & 255, (value >>> 24) & 255]; }
+function createDocx(markdown) {
+  const encoder = new TextEncoder(); const xmlEscape = (value) => escapeHtml(value).replace(/\n/g, '</w:t><w:br/><w:t>');
+  const paragraphs = String(markdown).replace(/\r/g, '').split('\n').filter((line) => line.trim()).map((line) => { const clean = line.replace(/^#{1,3}\s+/, '').replace(/^[-*+]\s+/, '• '); return `<w:p><w:r><w:t xml:space="preserve">${xmlEscape(clean)}</w:t></w:r></w:p>`; }).join('');
+  const files = { '[Content_Types].xml': `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`, '_rels/.rels': `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`, 'word/_rels/document.xml.rels': `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>`, 'word/styles.xml': `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:eastAsia="Microsoft YaHei"/><w:sz w:val="22"/></w:rPr></w:style></w:styles>`, 'word/document.xml': `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${paragraphs}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>` };
+  const chunks = []; const central = []; let offset = 0; const now = new Date(); const dosTime = (now.getHours() << 11) | (now.getMinutes() << 5) | Math.floor(now.getSeconds() / 2); const dosDate = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+  for (const [name, content] of Object.entries(files)) { const nameBytes = encoder.encode(name); const data = encoder.encode(content); const crc = crc32(data); const local = new Uint8Array([...u32(0x04034b50), ...u16(20), ...u16(0), ...u16(0), ...u16(dosTime), ...u16(dosDate), ...u32(crc), ...u32(data.length), ...u32(data.length), ...u16(nameBytes.length), ...u16(0), ...nameBytes, ...data]); chunks.push(local); central.push({ nameBytes, crc, length: data.length, offset }); offset += local.length; }
+  const centralBytes = central.map(({ nameBytes, crc, length, offset: fileOffset }) => new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0), ...u16(0), ...u16(dosTime), ...u16(dosDate), ...u32(crc), ...u32(length), ...u32(length), ...u16(nameBytes.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(fileOffset), ...nameBytes])); const centralLength = centralBytes.reduce((sum, item) => sum + item.length, 0); const end = new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(central.length), ...u16(central.length), ...u32(centralLength), ...u32(offset), ...u16(0)]); downloadFile(`${getTitle(markdown)}.docx`, new Blob([...chunks, ...centralBytes, end], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' }), 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'); showToast('Word 文档已导出');
+}
+
+async function copyRichText() { const preview = $('#article-preview'); const text = preview.innerText; try { if (window.ClipboardItem && navigator.clipboard?.write) { await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([state.currentArticle.html], { type: 'text/html' }), 'text/plain': new Blob([text], { type: 'text/plain' }) })]); } else await navigator.clipboard.writeText(text); showToast('富文本已复制，可直接粘贴到公众号后台'); } catch { await copyText(text, '文章内容已复制'); } }
+async function copyText(text, message) { try { await navigator.clipboard.writeText(text); } catch { const area = document.createElement('textarea'); area.value = text; document.body.appendChild(area); area.select(); document.execCommand('copy'); area.remove(); } showToast(message); }
+
+function updateTheme() { document.body.dataset.theme = state.theme; localStorage.setItem(STORAGE.theme, state.theme); $('#theme-toggle .theme-label').textContent = state.theme === 'dark' ? '浅色模式' : '深色模式'; $('#theme-toggle .theme-icon').textContent = state.theme === 'dark' ? '☼' : '◐'; }
+function updateConfigUi() {
+  const active = getActiveModel();
+  const configured = Boolean(active?.apiKey?.trim());
+  $('#settings-status').textContent = configured ? active.name : '待配置';
+  $('#model-caption').textContent = active ? `${active.name} · ${active.model}` : '未选择模型';
+}
+
+function bindEvents() {
+  $('#open-settings').addEventListener('click', () => openModal('settings-modal'));
+  $('#start-writing').addEventListener('click', welcomeMessage);
+  $('#send-button').addEventListener('click', () => sendMessage());
+  $('#message-input').addEventListener('input', resizeTextarea);
+  $('#message-input').addEventListener('keydown', (event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendMessage(); } });
+  $$('.shortcut, .sidebar-prompt, .welcome-chip').forEach((button) => button.addEventListener('click', () => handleShortcut(button)));
+  $('#clear-chat').addEventListener('click', () => { if (!state.history.length) { showToast('当前还没有对话'); return; } if (confirm('确定清空当前对话吗？清空后无法恢复。')) { state.history = []; saveHistory(); renderMessages(); showToast('对话已清空'); } });
+  $('#add-model').addEventListener('click', startNewModel);
+  $('#save-model').addEventListener('click', saveEditingModel);
+  $('#delete-model').addEventListener('click', deleteEditingModel);
+  $('#toggle-key').addEventListener('click', () => { const input = $('#api-key'); input.type = input.type === 'password' ? 'text' : 'password'; $('#toggle-key').textContent = input.type === 'password' ? '显示' : '隐藏'; });
+  $('#open-tutorial').addEventListener('click', () => { closeModal('settings-modal'); openModal('tutorial-modal'); });
+  $$('.modal-close, [data-close]').forEach((button) => button.addEventListener('click', () => closeModal(button.dataset.close || button.closest('.modal-backdrop').id)));
+  $$('.modal-backdrop').forEach((modal) => modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(modal.id); }));
+  $('#theme-toggle').addEventListener('click', () => { state.theme = state.theme === 'dark' ? 'light' : 'dark'; updateTheme(); });
+  $('#copy-richtext').addEventListener('click', copyRichText); $('#download-html').addEventListener('click', exportHtml); $('#download-markdown').addEventListener('click', exportMarkdown); $('#download-word').addEventListener('click', () => createDocx(state.currentArticle.markdown));
+  $('#export-header').addEventListener('click', () => { const last = [...state.history].reverse().find((message) => message.role === 'assistant' && message.content.length > 30); if (last) openPreview(last.content); else showToast('先生成一篇文章，再来导出吧'); });
+  $('#open-sidebar').addEventListener('click', () => $('#sidebar').classList.add('open')); $('#close-sidebar').addEventListener('click', () => $('#sidebar').classList.remove('open')); $$('#sidebar [data-prompt], #start-writing').forEach((button) => button.addEventListener('click', () => $('#sidebar').classList.remove('open')));
+}
+
+updateTheme(); updateConfigUi(); renderMessages(); bindEvents();
+if (!state.history.length && !state.apiKey) setTimeout(() => openModal('settings-modal'), 750);
+
+    </script>
+  </body>
+</html>
